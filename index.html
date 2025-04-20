@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusMate - Futuristic Productivity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <style>
+        :root {
+            --primary-light: #3b82f6;
+            --primary-dark: #6366f1;
+            --secondary-light: #10b981;
+            --secondary-dark: #14b8a6;
+            --accent-light: #f97316;
+            --accent-dark: #f59e0b;
+            --text-light: #1e293b;
+            --text-dark: #e2e8f0;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --card-light: rgba(255, 255, 255, 0.8);
+            --card-dark: rgba(30, 41, 59, 0.8);
+            --glass-light: rgba(255, 255, 255, 0.2);
+            --glass-dark: rgba(15, 23, 42, 0.2);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(2, 8, 24, 0.3);
+        }
+
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-glow:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .btn-glow:hover:after {
+            transform: translateX(100%);
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            stroke-linecap: round;
+        }
+
+        .theme-study {
+            --primary: var(--primary-light);
+            --secondary: #93c5fd;
+            --bg: url('https://images.unsplash.com/photo-1524995997946-a1c2e315ee42?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            --text: var(--text-light);
+            --accent: #60a5fa;
+            --card: var(--card-light);
+            --glass: var(--glass-light);
+        }
+
+        .theme-coding {
+            --primary: var(--secondary-dark);
+            --secondary: #6ee7b7;
+            --bg: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+            --text: var(--text-dark);
+            --accent: #10b981;
+            --card: var(--card-dark);
+            --glass: var(--glass-dark);
+        }
+
+        .theme-exercise {
+            --primary: var(--accent-light);
+            --secondary: #fdba74;
+            --bg: url('https://images.unsplash.com/photo-1571019613454-1cb2f5b2f836?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            --text: var(--text-light);
+            --accent: #ea580c;
+            --card: var(--card-light);
+            --glass: var(--glass-light);
+        }
+
+        .theme-yoga {
+            --primary: #84cc16;
+            --secondary: #bef264;
+            --bg: url('https://images.unsplash.com/photo-1545389336-cf090694435e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+            --text: var(--text-light);
+            --accent: #65a30d;
+            --card: var(--card-light);
+            --glass: var(--glass-light);
+        }
+
+        .dark .theme-study {
+            --primary: var(--primary-dark);
+            --text: var(--text-dark);
+            --card: var(--card-dark);
+            --glass: var(--glass-dark);
+        }
+
+        .dark .theme-exercise {
+            --text: var(--text-dark);
+            --card: var(--card-dark);
+            --glass: var(--glass-dark);
+        }
+
+        .dark .theme-yoga {
+            --text: var(--text-dark);
+            --card: var(--card-dark);
+            --glass: var(--glass-dark);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            background-image: var(--bg);
+        }
+
+        .card {
+            background-color: var(--card);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: var(--text);
+        }
+
+        .quote-container {
+            min-height: 120px;
+        }
+
+        /* Animation for focus mode */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Task item drag styling */
+        .task-item {
+            transition: transform 0.2s ease;
+        }
+
+        .task-item.dragging {
+            opacity: 0.5;
+            background-color: var(--secondary);
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .timer-container {
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Dark mode toggle switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #68D391;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #68D391;
+        }
+
+        /* 3D card effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+
+        .card-3d:hover {
+            transform: rotateY(10deg) rotateX(5deg) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* Input glow effect */
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+            border-color: var(--primary);
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 2px;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary) }
+        }
+    </style>
+</head>
+<body class="theme-study min-h-screen font-sans">
+    <!-- Floating particles -->
+    <div id="particles-container"></div>
+
+    <!-- Navigation -->
+    <nav class="glass fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-brain text-primary text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-primary font-['Orbitron']">FOCUSMATE</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- Dark mode toggle -->
+                    <div class="flex items-center">
+                        <span class="mr-2 text-sm"><i class="fas fa-sun"></i></span>
+                        <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                            <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                            <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                        <span class="ml-2 text-sm"><i class="fas fa-moon"></i></span>
+                    </div>
+                    
+                    <button id="settings-btn" class="p-2 rounded-full text-gray-500 hover:text-primary focus:outline-none transition-colors">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button id="user-btn" class="p-2 rounded-full text-gray-500 hover:text-primary focus:outline-none transition-colors">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-16 pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <!-- Theme Selector -->
+        <div class="flex flex-wrap justify-center mb-6 gap-2">
+            <button data-theme="study" class="theme-btn btn-primary px-4 py-2 rounded-full flex items-center btn-glow">
+                <i class="fas fa-book mr-2"></i> Study
+            </button>
+            <button data-theme="coding" class="theme-btn bg-gray-800 text-white px-4 py-2 rounded-full flex items-center btn-glow">
+                <i class="fas fa-code mr-2"></i> Coding
+            </button>
+            <button data-theme="exercise" class="theme-btn bg-orange-500 text-white px-4 py-2 rounded-full flex items-center btn-glow">
+                <i class="fas fa-running mr-2"></i> Exercise
+            </button>
+            <button data-theme="yoga" class="theme-btn bg-green-500 text-white px-4 py-2 rounded-full flex items-center btn-glow">
+                <i class="fas fa-spa mr-2"></i> Yoga
+            </button>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="main-content flex flex-col md:flex-row gap-6">
+            <!-- Timer Section -->
+            <div class="timer-container flex-1 card rounded-2xl p-6 card-3d">
+                <h2 class="text-2xl font-semibold mb-4 font-['Orbitron']">FOCUS SESSION</h2>
+                
+                <!-- Timer Display -->
+                <div class="flex flex-col items-center justify-center mb-6">
+                    <div class="relative w-64 h-64 mb-4">
+                        <svg class="w-full h-full" viewBox="0 0 100 100">
+                            <circle class="text-gray-200 opacity-30" stroke-width="8" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                            <circle id="progress-circle" class="text-primary" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="0" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center flex-col">
+                            <div id="time-display" class="text-5xl font-bold font-['Orbitron'] tracking-wider">25:00</div>
+                            <div id="timer-state" class="text-lg mt-2">Ready to focus</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button id="start-btn" class="btn-primary px-6 py-3 rounded-full btn-glow">
+                            <i class="fas fa-play mr-2"></i> Start
+                        </button>
+                        <button id="reset-btn" class="bg-gray-200 text-gray-800 px-6 py-3 rounded-full btn-glow">
+                            <i class="fas fa-redo mr-2"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Timer Controls -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label for="work-duration" class="block text-sm font-medium mb-1">Work Duration (min)</label>
+                        <input type="number" id="work-duration" min="1" max="90" value="25" class="w-full px-3 py-2 border rounded-md input-glow focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="break-duration" class="block text-sm font-medium mb-1">Break Duration (min)</label>
+                        <input type="number" id="break-duration" min="1" max="30" value="5" class="w-full px-3 py-2 border rounded-md input-glow focus:outline-none">
+                    </div>
+                </div>
+                
+                <!-- Session Counter -->
+                <div class="flex justify-between items-center bg-opacity-20 bg-primary rounded-lg p-3 glass">
+                    <span class="text-sm font-medium">Today's Sessions:</span>
+                    <span id="session-counter" class="font-bold text-xl">0</span>
+                </div>
+            </div>
+            
+            <!-- Task Manager -->
+            <div class="task-container flex-1 card rounded-2xl p-6 card-3d">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold font-['Orbitron']">TASK MANAGER</h2>
+                    <button id="add-task-btn" class="btn-primary px-4 py-2 rounded-full btn-glow">
+                        <i class="fas fa-plus mr-2"></i> Add Task
+                    </button>
+                </div>
+                
+                <!-- Task Input (hidden by default) -->
+                <div id="task-input-container" class="hidden mb-4">
+                    <div class="flex space-x-2">
+                        <input type="text" id="task-input" placeholder="What needs to be done?" class="flex-1 px-3 py-2 border rounded-md input-glow focus:outline-none">
+                        <button id="save-task-btn" class="btn-primary px-4 py-2 rounded-md btn-glow">
+                            Save
+                        </button>
+                    </div>
+                    <div class="mt-2 flex space-x-2">
+                        <select id="task-category" class="px-2 py-1 border rounded-md text-sm input-glow focus:outline-none">
+                            <option value="study">Study</option>
+                            <option value="coding">Coding</option>
+                            <option value="exercise">Exercise</option>
+                            <option value="yoga">Yoga</option>
+                        </select>
+                        <select id="task-priority" class="px-2 py-1 border rounded-md text-sm input-glow focus:outline-none">
+                            <option value="low">Low Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="high">High Priority</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Task List -->
+                <div id="task-list" class="space-y-2 max-h-96 overflow-y-auto pr-2">
+                    <!-- Tasks will be added here dynamically -->
+                    <div class="task-item glass rounded-xl p-3 flex items-center cursor-move hover:bg-opacity-50 transition-all">
+                        <input type="checkbox" class="mr-3 h-5 w-5 rounded border-gray-300 focus:ring-primary">
+                        <div class="flex-1">
+                            <div class="font-medium">Complete math assignment</div>
+                            <div class="text-xs text-gray-500 flex items-center">
+                                <span class="inline-block w-2 h-2 rounded-full bg-blue-500 mr-1"></span>
+                                Study • Medium Priority
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-primary transition-colors">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="task-item glass rounded-xl p-3 flex items-center cursor-move hover:bg-opacity-50 transition-all">
+                        <input type="checkbox" class="mr-3 h-5 w-5 rounded border-gray-300 focus:ring-primary" checked>
+                        <div class="flex-1">
+                            <div class="font-medium line-through text-gray-400">Read chapter 3</div>
+                            <div class="text-xs text-gray-500 flex items-center">
+                                <span class="inline-block w-2 h-2 rounded-full bg-blue-500 mr-1"></span>
+                                Study • Low Priority
+                            </div>
+                        </div>
+                        <button class="text-gray-400 hover:text-primary transition-colors">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quote and Music Section -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Motivational Quote -->
+            <div class="card rounded-2xl p-6 quote-container flex flex-col justify-center card-3d">
+                <div class="text-center">
+                    <i class="fas fa-quote-left text-gray-300 text-2xl mb-2"></i>
+                    <p id="motivational-quote" class="text-lg italic">"The secret of getting ahead is getting started."</p>
+                    <p id="quote-author" class="mt-2 text-sm text-gray-500">- Mark Twain</p>
+                </div>
+                <button id="new-quote-btn" class="mt-4 btn-secondary self-center px-4 py-2 rounded-full text-sm btn-glow">
+                    <i class="fas fa-sync-alt mr-2"></i> New Quote
+                </button>
+            </div>
+            
+            <!-- Music Player -->
+            <div class="card rounded-2xl p-6 card-3d">
+                <h2 class="text-xl font-semibold mb-4 font-['Orbitron']">FOCUS SOUNDS</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <button class="sound-btn glass hover:bg-opacity-50 rounded-xl p-3 flex items-center transition-all">
+                        <i class="fas fa-cloud-rain text-blue-500 mr-2"></i>
+                        <span>Rain</span>
+                    </button>
+                    <button class="sound-btn glass hover:bg-opacity-50 rounded-xl p-3 flex items-center transition-all">
+                        <i class="fas fa-water text-blue-300 mr-2"></i>
+                        <span>Ocean</span>
+                    </button>
+                    <button class="sound-btn glass hover:bg-opacity-50 rounded-xl p-3 flex items-center transition-all">
+                        <i class="fas fa-fire text-orange-500 mr-2"></i>
+                        <span>Fireplace</span>
+                    </button>
+                    <button class="sound-btn glass hover:bg-opacity-50 rounded-xl p-3 flex items-center transition-all">
+                        <i class="fas fa-wind text-gray-400 mr-2"></i>
+                        <span>White Noise</span>
+                    </button>
+                </div>
+                <div class="mt-4 flex items-center">
+                    <i class="fas fa-volume-down text-gray-500 mr-2"></i>
+                    <input type="range" id="volume-control" min="0" max="100" value="50" class="flex-1">
+                    <i class="fas fa-volume-up text-gray-500 ml-2"></i>
+                </div>
+                <div class="mt-2 flex justify-between text-xs text-gray-500">
+                    <span>Off</span>
+                    <span>50%</span>
+                    <span>Max</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Focus Mode Overlay -->
+    <div id="focus-overlay" class="fixed inset-0 bg-black bg-opacity-90 z-20 hidden flex items-center justify-center">
+        <div class="text-center text-white max-w-md px-4">
+            <div id="focus-timer" class="text-8xl font-bold mb-6 pulse font-['Orbitron'] tracking-wider">25:00</div>
+            <div id="focus-message" class="text-3xl mb-6">Stay focused!</div>
+            <div id="focus-task" class="text-xl mb-8">Current Task: Math Assignment</div>
+            <div id="focus-quote" class="italic mb-8 text-xl">"Concentration is the secret of strength." - Ralph Waldo Emerson</div>
+            <button id="exit-focus-btn" class="bg-white text-black px-8 py-4 rounded-full font-medium btn-glow text-lg">
+                Exit Focus Mode
+            </button>
+        </div>
+    </div>
+
+    <!-- Confetti Effect Container -->
+    <div id="confetti-container" class="fixed inset-0 pointer-events-none z-30 overflow-hidden hidden"></div>
+
+    <!-- Audio Elements (hidden) -->
+    <audio id="click-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
+    <audio id="complete-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+
+    <script>
+        // DOM Elements
+        const timeDisplay = document.getElementById('time-display');
+        const timerState = document.getElementById('timer-state');
+        const startBtn = document.getElementById('start-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const progressCircle = document.getElementById('progress-circle');
+        const sessionCounter = document.getElementById('session-counter');
+        const workDurationInput = document.getElementById('work-duration');
+        const breakDurationInput = document.getElementById('break-duration');
+        const taskInputContainer = document.getElementById('task-input-container');
+        const taskInput = document.getElementById('task-input');
+        const addTaskBtn = document.getElementById('add-task-btn');
+        const saveTaskBtn = document.getElementById('save-task-btn');
+        const taskList = document.getElementById('task-list');
+        const taskCategory = document.getElementById('task-category');
+        const taskPriority = document.getElementById('task-priority');
+        const motivationalQuote = document.getElementById('motivational-quote');
+        const quoteAuthor = document.getElementById('quote-author');
+        const newQuoteBtn = document.getElementById('new-quote-btn');
+        const soundBtns = document.querySelectorAll('.sound-btn');
+        const volumeControl = document.getElementById('volume-control');
+        const focusOverlay = document.getElementById('focus-overlay');
+        const focusTimer = document.getElementById('focus-timer');
+        const focusMessage = document.getElementById('focus-message');
+        const focusTask = document.getElementById('focus-task');
+        const focusQuote = document.getElementById('focus-quote');
+        const exitFocusBtn = document.getElementById('exit-focus-btn');
+        const themeBtns = document.querySelectorAll('.theme-btn');
+        const darkModeToggle = document.getElementById('toggle');
+        const confettiContainer = document.getElementById('confetti-container');
+        const clickSound = document.getElementById('click-sound');
+        const completeSound = document.getElementById('complete-sound');
+        const particlesContainer = document.getElementById('particles-container');
+        
+        // Audio Elements
+        const rainSound = new Howl({
+            src: ['https://cdn.pixabay.com/audio/2025/03/20/audio_866bd173d3.mp3'],
+            loop: true,
+            volume: 0.5
+        });
+        
+        const oceanSound = new Howl({
+            src: ['https://cdn.pixabay.com/audio/2025/01/13/audio_b99e35e26d.mp3'],
+            loop: true,
+            volume: 0.5
+        });
+        
+        const fireplaceSound = new Howl({
+            src: ['https://cdn.pixabay.com/audio/2024/12/02/audio_9feedb27d2.mp3'],
+            loop: true,
+            volume: 0.5
+        });
+        
+        const whiteNoiseSound = new Howl({
+            src: ['https://cdn.pixabay.com/audio/2025/04/04/audio_cc53130fa0.mp3'],
+            loop: true,
+            volume: 0.5
+        });
+        
+        // Timer Variables
+        let timer;
+        let timeLeft = 25 * 60; // 25 minutes in seconds
+        let totalTime = 25 * 60;
+        let isRunning = false;
+        let isWorkTime = true;
+        let sessionsCompleted = 0;
+        let motivationInterval;
+        
+        // Task Variables
+        let tasks = [
+            { id: 1, text: "Complete math assignment", category: "study", priority: "medium", completed: false },
+            { id: 2, text: "Read chapter 3", category: "study", priority: "low", completed: true }
+        ];
+        
+        // Quote Variables
+        const quotes = [
+            { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+            { text: "Concentration is the secret of strength.", author: "Ralph Waldo Emerson" },
+            { text: "Productivity is never an accident. It is always the result of a commitment to excellence, intelligent planning, and focused effort.", author: "Paul J. Meyer" },
+            { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+            { text: "Focus on being productive instead of busy.", author: "Tim Ferriss" },
+            { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
+            { text: "The successful warrior is the average man, with laser-like focus.", author: "Bruce Lee" },
+            { text: "Concentrate all your thoughts upon the work at hand. The sun's rays do not burn until brought to a focus.", author: "Alexander Graham Bell" },
+            { text: "The future depends on what you do today.", author: "Mahatma Gandhi" },
+            { text: "Your time is limited, don't waste it living someone else's life.", author: "Steve Jobs" }
+        ];
+        
+        // Sound Variables
+        let currentSound = null;
+        let currentVolume = 0.5;
+        
+        // Initialize the app
+        function init() {
+            updateTimerDisplay();
+            renderTasks();
+            displayRandomQuote();
+            setupEventListeners();
+            setupDragAndDrop();
+            createParticles();
+            
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+                darkModeToggle.checked = true;
+            }
+            
+            // Play click sound on all buttons
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    clickSound.currentTime = 0;
+                    clickSound.volume = currentVolume;
+                    clickSound.play();
+                });
+            });
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Timer controls
+            startBtn.addEventListener('click', toggleTimer);
+            resetBtn.addEventListener('click', resetTimer);
+            
+            // Task controls
+            addTaskBtn.addEventListener('click', showTaskInput);
+            saveTaskBtn.addEventListener('click', addTask);
+            
+            // Quote controls
+            newQuoteBtn.addEventListener('click', displayRandomQuote);
+            
+            // Sound controls
+            soundBtns.forEach((btn, index) => {
+                btn.addEventListener('click', () => {
+                    const sounds = ['Rain', 'Ocean', 'Fireplace', 'White Noise'];
+                    playSound(sounds[index]);
+                });
+            });
+            
+            volumeControl.addEventListener('input', updateVolume);
+            
+            // Focus mode controls
+            exitFocusBtn.addEventListener('click', exitFocusMode);
+            
+            // Theme controls
+            themeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const theme = btn.dataset.theme;
+                    document.body.className = `theme-${theme} min-h-screen font-sans`;
+                    
+                    // Update background image
+                    document.body.style.backgroundImage = `var(--bg)`;
+                });
+            });
+            
+            // Dark mode toggle
+            darkModeToggle.addEventListener('change', toggleDarkMode);
+        }
+        
+        // Timer functions
+        function toggleTimer() {
+            if (isRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+                enterFocusMode();
+            }
+        }
+        
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                startBtn.innerHTML = '<i class="fas fa-pause mr-2"></i> Pause';
+                timerState.textContent = isWorkTime ? 'Focusing...' : 'On break';
+                
+                // Start motivation interval (every minute)
+                motivationInterval = setInterval(() => {
+                    displayRandomQuote();
+                    showNotification("Keep going! You're doing great!");
+                }, 60000);
+                
+                timer = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    
+                    if (timeLeft <= 0) {
+                        timerComplete();
+                    }
+                }, 1000);
+            }
+        }
+        
+        function pauseTimer() {
+            if (isRunning) {
+                clearInterval(timer);
+                clearInterval(motivationInterval);
+                isRunning = false;
+                startBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Resume';
+                timerState.textContent = 'Paused';
+            }
+        }
+        
+        function resetTimer() {
+            clearInterval(timer);
+            clearInterval(motivationInterval);
+            isRunning = false;
+            isWorkTime = true;
+            const duration = parseInt(workDurationInput.value) * 60;
+            timeLeft = duration;
+            totalTime = duration;
+            updateTimerDisplay();
+            startBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Start';
+            timerState.textContent = 'Ready to focus';
+            updateProgressCircle();
+        }
+        
+        function timerComplete() {
+            clearInterval(timer);
+            clearInterval(motivationInterval);
+            isRunning = false;
+            
+            if (isWorkTime) {
+                sessionsCompleted++;
+                sessionCounter.textContent = sessionsCompleted;
+                isWorkTime = false;
+                timeLeft = parseInt(breakDurationInput.value) * 60;
+                totalTime = timeLeft;
+                timerState.textContent = 'Break time!';
+                displayRandomQuote();
+                
+                // Notification and celebration
+                showNotification("Great job! Time for a break.");
+                createConfetti();
+                completeSound.currentTime = 0;
+                completeSound.volume = currentVolume;
+                completeSound.play();
+            } else {
+                isWorkTime = true;
+                timeLeft = parseInt(workDurationInput.value) * 60;
+                totalTime = timeLeft;
+                timerState.textContent = 'Ready to focus';
+                
+                // Notification
+                showNotification("Break's over! Ready to focus again?");
+            }
+            
+            updateTimerDisplay();
+            startBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Start';
+            updateProgressCircle();
+            
+            // Play notification sound
+            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
+            audio.volume = currentVolume;
+            audio.play();
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const display = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timeDisplay.textContent = display;
+            if (focusOverlay.style.display === 'flex') {
+                focusTimer.textContent = display;
+            }
+            updateProgressCircle();
+        }
+        
+        function updateProgressCircle() {
+            const circumference = 2 * Math.PI * 40;
+            const offset = circumference - (timeLeft / totalTime) * circumference;
+            progressCircle.style.strokeDashoffset = offset;
+        }
+        
+        // Task functions
+        function showTaskInput() {
+            taskInputContainer.classList.toggle('hidden');
+            if (!taskInputContainer.classList.contains('hidden')) {
+                taskInput.focus();
+            }
+        }
+        
+        function addTask() {
+            const taskText = taskInput.value.trim();
+            if (taskText) {
+                const newTask = {
+                    id: Date.now(),
+                    text: taskText,
+                    category: taskCategory.value,
+                    priority: taskPriority.value,
+                    completed: false
+                };
+                
+                tasks.unshift(newTask);
+                renderTasks();
+                taskInput.value = '';
+                taskInputContainer.classList.add('hidden');
+                
+                // Small celebration for adding a task
+                createMiniConfetti(taskInputContainer);
+            }
+        }
+        
+        function renderTasks() {
+            taskList.innerHTML = '';
+            
+            tasks.forEach(task => {
+                const taskItem = document.createElement('div');
+                taskItem.className = `task-item glass rounded-xl p-3 flex items-center cursor-move hover:bg-opacity-50 transition-all ${task.completed ? 'opacity-70' : ''}`;
+                taskItem.dataset.id = task.id;
+                taskItem.draggable = true;
+                
+                // Determine color based on category
+                let categoryColor = 'blue-500';
+                if (task.category === 'coding') categoryColor = 'green-500';
+                else if (task.category === 'exercise') categoryColor = 'orange-500';
+                else if (task.category === 'yoga') categoryColor = 'green-400';
+                
+                // Determine priority text
+                let priorityText = '';
+                if (task.priority === 'low') priorityText = 'Low Priority';
+                else if (task.priority === 'medium') priorityText = 'Medium Priority';
+                else if (task.priority === 'high') priorityText = 'High Priority';
+                
+                taskItem.innerHTML = `
+                    <input type="checkbox" class="mr-3 h-5 w-5 rounded border-gray-300 focus:ring-primary" ${task.completed ? 'checked' : ''}>
+                    <div class="flex-1">
+                        <div class="font-medium ${task.completed ? 'line-through text-gray-400' : ''}">${task.text}</div>
+                        <div class="text-xs text-gray-500 flex items-center">
+                            <span class="inline-block w-2 h-2 rounded-full bg-${categoryColor} mr-1"></span>
+                            ${task.category.charAt(0).toUpperCase() + task.category.slice(1)} • ${priorityText}
+                        </div>
+                    </div>
+                    <button class="delete-task text-gray-400 hover:text-primary transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                // Add event listeners to the new elements
+                const checkbox = taskItem.querySelector('input[type="checkbox"]');
+                checkbox.addEventListener('change', () => toggleTaskComplete(task.id));
+                
+                const deleteBtn = taskItem.querySelector('.delete-task');
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteTask(task.id);
+                });
+                
+                taskList.appendChild(taskItem);
+            });
+        }
+        
+        function toggleTaskComplete(taskId) {
+            const taskIndex = tasks.findIndex(task => task.id === taskId);
+            if (taskIndex !== -1) {
+                tasks[taskIndex].completed = !tasks[taskIndex].completed;
+                renderTasks();
+                
+                if (tasks[taskIndex].completed) {
+                    // Celebration for completing a task
+                    createMiniConfetti(taskList.children[taskIndex]);
+                    completeSound.currentTime = 0;
+                    completeSound.volume = currentVolume;
+                    completeSound.play();
+                }
+            }
+        }
+        
+        function deleteTask(taskId) {
+            tasks = tasks.filter(task => task.id !== taskId);
+            renderTasks();
+        }
+        
+        // Drag and drop functionality
+        function setupDragAndDrop() {
+            let draggedItem = null;
+            
+            taskList.addEventListener('dragstart', (e) => {
+                if (e.target.classList.contains('task-item')) {
+                    draggedItem = e.target;
+                    setTimeout(() => {
+                        e.target.classList.add('dragging');
+                    }, 0);
+                }
+            });
+            
+            taskList.addEventListener('dragend', (e) => {
+                if (e.target.classList.contains('task-item')) {
+                    e.target.classList.remove('dragging');
+                }
+            });
+            
+            taskList.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(e.clientY);
+                if (afterElement == null) {
+                    taskList.appendChild(draggedItem);
+                } else {
+                    taskList.insertBefore(draggedItem, afterElement);
+                }
+            });
+            
+            function getDragAfterElement(y) {
+                const draggableElements = [...taskList.querySelectorAll('.task-item:not(.dragging)')];
+                
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+        }
+        
+        // Quote functions
+        function displayRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const quote = quotes[randomIndex];
+            motivationalQuote.textContent = `"${quote.text}"`;
+            quoteAuthor.textContent = `- ${quote.author}`;
+            
+            if (focusOverlay.style.display === 'flex') {
+                focusQuote.textContent = `"${quote.text}" - ${quote.author}`;
+            }
+        }
+        
+        // Sound functions
+        function playSound(soundName) {
+            // Stop any currently playing sound
+            if (currentSound) {
+                currentSound.stop();
+            }
+            
+            // Reset all sound buttons
+            soundBtns.forEach(btn => {
+                btn.classList.remove('bg-primary', 'bg-opacity-30');
+                btn.classList.add('glass');
+            });
+            
+            // Play the selected sound
+            let soundElement;
+            switch (soundName.toLowerCase()) {
+                case 'rain':
+                    soundElement = rainSound;
+                    soundBtns[0].classList.add('bg-primary', 'bg-opacity-30');
+                    soundBtns[0].classList.remove('glass');
+                    break;
+                case 'ocean':
+                    soundElement = oceanSound;
+                    soundBtns[1].classList.add('bg-primary', 'bg-opacity-30');
+                    soundBtns[1].classList.remove('glass');
+                    break;
+                case 'fireplace':
+                    soundElement = fireplaceSound;
+                    soundBtns[2].classList.add('bg-primary', 'bg-opacity-30');
+                    soundBtns[2].classList.remove('glass');
+                    break;
+                case 'white noise':
+                    soundElement = whiteNoiseSound;
+                    soundBtns[3].classList.add('bg-primary', 'bg-opacity-30');
+                    soundBtns[3].classList.remove('glass');
+                    break;
+                default:
+                    return;
+            }
+            
+            soundElement.volume(currentVolume);
+            soundElement.play();
+            currentSound = soundElement;
+        }
+        
+        function updateVolume() {
+            currentVolume = volumeControl.value / 100;
+            if (currentSound) {
+                currentSound.volume(currentVolume);
+            }
+            clickSound.volume = currentVolume;
+            completeSound.volume = currentVolume;
+        }
+        
+        // Focus mode functions
+        function enterFocusMode() {
+            // Get current task (first uncompleted task)
+            const currentTask = tasks.find(task => !task.completed);
+            
+            if (currentTask) {
+                focusTask.textContent = `Current Task: ${currentTask.text}`;
+            } else {
+                focusTask.textContent = "No current task";
+            }
+            
+            focusTimer.textContent = timeDisplay.textContent;
+            focusMessage.textContent = isWorkTime ? 'Stay focused!' : 'Enjoy your break!';
+            displayRandomQuote();
+            
+            focusOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            // Start ambient sound if selected
+            if (currentSound) {
+                currentSound.play();
+            }
+        }
+        
+        function exitFocusMode() {
+            focusOverlay.style.display = 'none';
+            document.body.style.overflow = '';
+            pauseTimer();
+            
+            // Pause ambient sound
+            if (currentSound) {
+                currentSound.pause();
+            }
+        }
+        
+        // Dark mode toggle
+        function toggleDarkMode() {
+            if (darkModeToggle.checked) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('darkMode', 'false');
+            }
+        }
+        
+        // Notification function
+        function showNotification(message) {
+            // Check if the browser supports notifications
+            if (!("Notification" in window)) {
+                console.log("This browser does not support desktop notification");
+                return;
+            }
+            
+            // Check if notification permissions have already been granted
+            if (Notification.permission === "granted") {
+                // If it's okay let's create a notification
+                new Notification("FocusMate", {
+                    body: message,
+                    icon: "https://cdn-icons-png.flaticon.com/512/2965/2965879.png"
+                });
+            }
+            
+            // Otherwise, we need to ask the user for permission
+            else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    // If the user accepts, let's create a notification
+                    if (permission === "granted") {
+                        new Notification("FocusMate", {
+                            body: message,
+                            icon: "https://cdn-icons-png.flaticon.com/512/2965/2965879.png"
+                        });
+                    }
+                });
+            }
+        }
+        
+        // Confetti effect
+        function createConfetti() {
+            confettiContainer.innerHTML = '';
+            confettiContainer.classList.remove('hidden');
+            
+            const colors = ['#3b82f6', '#10b981', '#f97316', '#84cc16', '#6366f1', '#8b5cf6'];
+            
+            for (let i = 0; i < 100; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random properties
+                const size = Math.random() * 10 + 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const posX = Math.random() * window.innerWidth;
+                const posY = Math.random() * window.innerHeight * -1;
+                const animationDuration = Math.random() * 3 + 2;
+                const delay = Math.random() * 5;
+                const rotation = Math.random() * 360;
+                
+                // Apply styles
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.backgroundColor = color;
+                particle.style.left = `${posX}px`;
+                particle.style.top = `${posY}px`;
+                particle.style.animation = `fall ${animationDuration}s linear ${delay}s forwards`;
+                particle.style.transform = `rotate(${rotation}deg)`;
+                particle.style.opacity = Math.random() * 0.5 + 0.5;
+                
+                // Add to container
+                confettiContainer.appendChild(particle);
+            }
+            
+            // Remove confetti after animation
+            setTimeout(() => {
+                confettiContainer.classList.add('hidden');
+                confettiContainer.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Mini confetti effect for tasks
+        function createMiniConfetti(element) {
+            const rect = element.getBoundingClientRect();
+            const colors = ['#3b82f6', '#10b981', '#f97316', '#84cc16', '#6366f1', '#8b5cf6'];
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random properties
+                const size = Math.random() * 6 + 2;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const posX = rect.left + Math.random() * rect.width;
+                const posY = rect.top + Math.random() * rect.height;
+                const animationDuration = Math.random() * 2 + 1;
+                const delay = Math.random() * 1;
+                const rotation = Math.random() * 360;
+                
+                // Apply styles
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.backgroundColor = color;
+                particle.style.left = `${posX}px`;
+                particle.style.top = `${posY}px`;
+                particle.style.animation = `fall ${animationDuration}s linear ${delay}s forwards`;
+                particle.style.transform = `rotate(${rotation}deg)`;
+                particle.style.opacity = Math.random() * 0.5 + 0.5;
+                particle.style.position = 'fixed';
+                particle.style.zIndex = '100';
+                
+                // Add to container
+                document.body.appendChild(particle);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, animationDuration * 1000);
+            }
+        }
+        
+        // Create floating particles
+        function createParticles() {
+            const colors = ['rgba(59, 130, 246, 0.5)', 'rgba(16, 185, 129, 0.5)', 'rgba(249, 115, 22, 0.5)', 'rgba(132, 204, 22, 0.5)'];
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle floating';
+                
+                // Random properties
+                const size = Math.random() * 15 + 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const animationDuration = Math.random() * 10 + 10;
+                const delay = Math.random() * 5;
+                
+                // Apply styles
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.backgroundColor = color;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDuration = `${animationDuration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.borderRadius = '50%';
+                particle.style.filter = 'blur(2px)';
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                
+                // Add to container
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Keyframe animation for falling particles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(${window.innerHeight + 100}px) rotate(360deg);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
